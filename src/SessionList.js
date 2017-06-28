@@ -19,10 +19,11 @@ class SessionList extends Component {
 
     renderSessions() {
         return (
-            console.log(this.state.sessions),
             <div>
                 { this.state.sessions.map((s, i) => (
-                    <SessionComplete key={i} name={i} session={s} />
+                    (this.state.sessions[i].activity.length >= 1)
+                        ? <SessionComplete key={i} name={i} session={s} />
+                        : null
                 ))}
             </div>
         )
@@ -32,7 +33,7 @@ class SessionList extends Component {
         return (
             <div className="SessionList">
                 <SessionStart startSession={ this.startSession } />
-                { this.state.sessions.length > 0 ? this.renderSessions() : console.log(this.state.sessions.size) };
+                { this.renderSessions() };
             </div>
         );
     }
