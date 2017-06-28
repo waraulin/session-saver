@@ -9,7 +9,7 @@ import SessionComplete from './SessionComplete';
 class SessionList extends Component {
     constructor(props) {
         super(props);
-        this.state = { sessions: []  };
+        this.state = { sessions: [{activity: "", description: "", location: ""}]  };
         this.startSession = this.startSession.bind(this);
     }
 
@@ -26,14 +26,6 @@ class SessionList extends Component {
                 ))}
             </div>
         )
-
-        /*return this.state.sessions.map((session, i) => (
-         <SessionComplete
-         key={ i }
-         name={ i }
-         session={ session }
-         />
-         ));*/
     }
 
     render() {
