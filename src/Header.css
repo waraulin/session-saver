@@ -1,0 +1,13 @@
+.headerContent {
+    position: static;
+    height: 80px;
+    width: 100%;
+    text-align: center;
+    background-color: #00aeef;
+}
+
+h1 {
+    display: inline-block;
+    margin: 0 auto;
+    padding: 21px;
+}
