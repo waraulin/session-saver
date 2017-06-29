@@ -8,31 +8,28 @@ import SessionComplete from './SessionComplete';
 
 class SessionList extends Component {
     constructor(props) {
-        super(props);
-        this.state = { sessions: [{activity: "", description: "", location: ""}]  };
+        super();
+        this.state = { sessions: []  };
         this.startSession = this.startSession.bind(this);
     }
 
     startSession(session) {
-        this.setState({ sessions: [...this.state.sessions, session] });
+        let newSession = { ...session };
+        this.setState({ sessions: [...this.state.sessions, newSession] });
     }
 
     renderSessions() {
         return (
-            <div>
-                { this.state.sessions.map((s, i) => (
-                    (this.state.sessions[i].activity.length >= 1)
-                        ? <SessionComplete key={i} name={i} session={s} />
-                        : null
-                ))}
-            </div>
-        )
+            this.state.sessions.map((session, i) => (
+                <SessionComplete key={i} name={i} session={session} />
+            ))
+        );
     }
 
     render() {
         return (
             <div className="SessionList">
-                <SessionStart startSession={ this.startSession } />
+                <SessionStart startSession={ this.startSession } state={ this.state } />
                 { this.renderSessions() };
             </div>
         );

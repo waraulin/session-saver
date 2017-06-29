@@ -6,7 +6,7 @@ import './SessionStart.css';
 
 class SessionStart extends Component {
     constructor(props) {
-        super(props);
+        super();
     }
 
     render () {

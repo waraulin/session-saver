@@ -7,21 +7,16 @@ import './SessionComplete';
 
 class SessionStart extends Component {
     constructor(props) {
-        super(props);
-        this.state = { sessions: []  };
+        super();
+        this.state = {};
         this.session = {
             activity: '',
             description: '',
             location: ''
         };
-        this.startSession = this.startSession.bind(this);
         this.setActivity = this.setActivity.bind(this);
         this.setDescription = this.setDescription.bind(this);
         this.setLocation = this.setLocation.bind(this);
-    };
-
-    startSession() {
-        this.props.startSession(this.session);
     };
 
     setActivity(e) {
@@ -44,7 +39,7 @@ class SessionStart extends Component {
                 <input type="text" onChange={ this.setDescription } />
                 <h5>Location</h5>
                 <input type="text" onChange={ this.setLocation } />
-                <button onClick={ () => this.startSession() }>Start session!</button>
+                <button onClick={ () => this.props.startSession(this.session) }>Start session!</button>
             </div>
         );
     }
