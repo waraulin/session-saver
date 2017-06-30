@@ -14,12 +14,3 @@ input {
     padding: 4px;
     height: 20px;
 }
-
-button {
-    display: block;
-    margin: 20px 0;
-    font-size: 14px;
-    border: 0;
-    color: #ffffff;
-    padding: 8px 12px;
-}

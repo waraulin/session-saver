@@ -4,6 +4,20 @@ body {
   font-family: sans-serif;
 }
 
-button {
+.std-btn {
   background-color: #00aeef;
+  display: block;
+  margin: 20px 0;
+  font-size: 14px;
+  border: 0;
+  color: #ffffff;
+  padding: 8px 12px;
+}
+
+.visible {
+  display: block;
+}
+
+.hidden {
+  display: none;
 }
