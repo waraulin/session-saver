@@ -11,3 +11,8 @@ h1 {
     margin: 0 auto;
     padding: 21px;
 }
+
+.btn--header {
+    float: right;
+    margin: 23px 24px;
+}

@@ -14,19 +14,11 @@ class SessionStart extends Component {
             description: '',
             location: ''
         };
-        this.setActivity = this.setActivity.bind(this);
-        this.setDescription = this.setDescription.bind(this);
-        this.setLocation = this.setLocation.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
     };
 
-    setActivity(e) {
-        this.session.activity = e.target.value;
-    };
-    setDescription(e) {
-        this.session.description = e.target.value;
-    };
-    setLocation(e) {
-        this.session.location = e.target.value;
+    handleInputChange(e) {
+        this.session[e.target.name] = e.target.value;
     };
 
     render () {
@@ -34,12 +26,12 @@ class SessionStart extends Component {
             <div className="SessionContent">
                 <h2>New Session</h2>
                 <h5>Activity</h5>
-                <input type="text" onChange={ this.setActivity } />
+                <input type="text" name="activity" onChange={ this.handleInputChange } />
                 <h5>Description</h5>
-                <input type="text" onChange={ this.setDescription } />
+                <input type="text" name="description" onChange={ this.handleInputChange } />
                 <h5>Location</h5>
-                <input type="text" onChange={ this.setLocation } />
-                <button className="std-btn" onClick={ () => this.props.startSession(this.session) }>Start session!</button>
+                <input type="text" name="location" onChange={ this.handleInputChange } />
+                <button className="btn" onClick={ () => this.props.startSession(this.session) }>Start session!</button>
             </div>
         )
     };

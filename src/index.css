@@ -1,10 +1,14 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
 }
 
-.std-btn {
+.btn {
   background-color: #00aeef;
   display: block;
   margin: 20px 0;
@@ -14,6 +18,13 @@ body {
   padding: 8px 12px;
 }
 
+input {
+  width: 100%;
+  padding: 4px 8px;
+  font-size: 14px;
+  line-height: 22px;
+}
+
 .visible {
   display: block;
 }
@@ -21,3 +32,4 @@ body {
 .hidden {
   display: none;
 }
+
