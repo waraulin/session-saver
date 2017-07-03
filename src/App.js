@@ -1,16 +1,30 @@
 import React, { Component } from 'react';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import './App.css';
 
-import HelloWorldList from './HelloWorldList';
 import Header from './Header';
 import SessionList from './SessionList';
+import About from './About';
+import NothingFound from './NothingFound';
+
+const MainContent = () => {
+    return (
+        <Switch>
+            <Route exact path="/" component={About}/>
+            <Route exact path="/sessions" component={SessionList}/>
+            <Route component={NothingFound}/>
+        </Switch>
+    )
+};
 
 const App = () => {
     return (
-        <div className="App">
-            <Header/>
-            <SessionList/>
-        </div>
+        <BrowserRouter>
+            <div className="App">
+                <Header/>
+                <MainContent/>
+            </div>
+        </BrowserRouter>
     );
 };
 

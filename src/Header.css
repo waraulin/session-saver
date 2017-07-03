@@ -6,13 +6,20 @@
     background-color: #00aeef;
 }
 
-h1 {
+.main-head {
     display: inline-block;
     margin: 0 auto;
     padding: 21px;
+    text-decoration: none;
+    font-size: 42px;
+    font-weight: bolder;
+}
+
+.main-head:active {
+    color: #000;
 }
 
 .btn--header {
     float: right;
-    margin: 23px 24px;
+    margin: 24px 8px;
 }
