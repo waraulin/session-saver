@@ -2,8 +2,8 @@
  * Created by Will on 6/27/17.
  */
 import React, { Component } from 'react';
-import './SessionStart.css';
-import './SessionComplete.css';
+import '../css/SessionStart.css';
+import '../css/SessionComplete.css';
 import ExpansionToggle from './ExpansionToggle';
 
 class SessionComplete extends Component {

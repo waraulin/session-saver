@@ -1,7 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import './App.css';
-
+import '../css/App.css';
 import Header from './Header';
 import SessionList from './SessionList';
 import About from './About';

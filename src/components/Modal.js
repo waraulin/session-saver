@@ -4,7 +4,8 @@
 //Sourced from https://daveceddia.com/open-modal-in-react/
 
 import React from 'react';
-import './Modal.css';
+import PropTypes from 'prop-types';
+import '../css/Modal.css';
 
 class Modal extends React.Component {
     render() {
@@ -25,9 +26,9 @@ class Modal extends React.Component {
 }
 
 Modal.propTypes = {
-    onClose: React.PropTypes.func.isRequired,
-    show: React.PropTypes.bool,
-    children: React.PropTypes.node
+    onClose: PropTypes.func.isRequired,
+    show: PropTypes.bool,
+    children: PropTypes.node
 };
 
 export default Modal;

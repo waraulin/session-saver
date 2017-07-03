@@ -2,7 +2,7 @@
  * Created by Will on 6/27/17.
  */
 import React, { Component } from 'react';
-import './SessionStart.css';
+import '../css/SessionStart.css';
 import './SessionComplete';
 
 class SessionStart extends Component {

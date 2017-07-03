@@ -2,7 +2,7 @@
  * Created by Will on 6/29/17.
  */
 import React, { Component } from 'react';
-import './ExpansionToggle.css';
+import '../css/ExpansionToggle.css';
 
 class ExpansionToggle extends Component {
     constructor (props) {
