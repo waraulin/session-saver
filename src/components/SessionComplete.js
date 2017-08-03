@@ -23,7 +23,7 @@ class SessionComplete extends Component {
         this.setState({
            expanded: !this.state.expanded
         });
-    }
+    };
 
     render () {
         return (
@@ -41,6 +41,7 @@ class SessionComplete extends Component {
                         <p>{this.props.session.location}</p>
                     </div>
                 )}
+                <button className="expansion-btn" onClick={ () => this.props.deleteSession(this.props.name) }>X Delete</button>
                 <ExpansionToggle expanded={ this.state.expanded } toggle={ this.handleExpansion }/>
             </div>
         )

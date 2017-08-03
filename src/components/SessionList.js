@@ -5,34 +5,55 @@
 import React, { Component } from 'react';
 import SessionStart from './SessionStart';
 import SessionComplete from './SessionComplete';
+import base from '../base.js';
 
 class SessionList extends Component {
     constructor(props) {
         super(props);
-        this.state = { sessions: []  };
-        this.startSession = this.startSession.bind(this);
+        const prevSessions = JSON.parse(localStorage.getItem("sessions"));
+        this.state = { sessions: prevSessions ? prevSessions : [] };
     };
 
-    startSession(session) {
+    componentWillMount() {
+        if(this.props.match.params.user !== undefined) {
+            this.ref = base.syncState(`${this.props.match.params.user}/sessions`, {context: this, state: 'sessions'});
+        }
+    }
+
+    componentWillUnmount() {
+        base.removeBinding(this.ref);
+    }
+
+    componentWillUpdate(nextProps, nextState) {
+        if(nextState.sessions !== undefined) {
+            localStorage.setItem("sessions", JSON.stringify(nextState.sessions));
+        }
+    }
+
+    startSession = (session) => {
         let newSession = { ...session };
         this.setState({ sessions: [...this.state.sessions, newSession] });
     };
 
-    renderSessions() {
-        return (
-            this.state.sessions.map((session, i) => (
-                <SessionComplete key={i} name={i} session={session} />
-            ))
-        );
+    deleteSession = (key) => {
+        let sessions = [...this.state.sessions];
+        sessions[key] = null;
+        sessions = sessions.filter(function(session) {
+           return session !== undefined && session != null;
+        });
+        this.setState({ sessions });
     };
 
     render() {
         return (
             <div className="SessionList">
-                <SessionStart startSession={ this.startSession } state={ this.state } />
-                { this.renderSessions() }
+                <SessionStart startSession={ this.startSession } />
+                { this.state.sessions.map((session, i) => (
+                    session !== undefined ?
+                    <SessionComplete key={i} name={i} session={session} deleteSession={this.deleteSession} /> : null
+                ))}
             </div>
         )
-    };
+    }
 }
 export default SessionList;
