@@ -1,18 +1,26 @@
 .headerContent {
     position: static;
-    height: 80px;
+    height: 40px;
     width: 100%;
     text-align: center;
-    background-color: #00aeef;
+    background-color: rgba(66,165,252, 1);
+    line-height: 40px;
+}
+
+.btn {
+    padding: 0 12px;
+    line-height: 40px;
+    background-color: transparent;
 }
 
 .main-head {
     display: inline-block;
-    margin: 0 auto;
-    padding: 21px;
     text-decoration: none;
-    font-size: 42px;
+    font-size: 28px;
     font-weight: bolder;
+    float: left;
+    margin: 0 24px;
+    color: #fff;
 }
 
 .main-head:active {
@@ -21,5 +29,5 @@
 
 .btn--header {
     float: right;
-    margin: 24px 8px;
+    margin: 0 8px;
 }

@@ -40,9 +40,9 @@ class Header extends Component {
 
         return (
             <div className="headerContent">
+                <Link className="main-head" to="/">Session Saver</Link>
                 <Link className="btn btn--header" to="/">About</Link>
                 <Link className="btn btn--header" to="/sessions">Get Started</Link>
-                <Link className="main-head" to="/">Session Saver</Link>
                 <button className="btn btn--header" onClick={ this.toggleModal }>Login</button>
                 <Modal show={ this.state.modalOpen } onClose={ this.toggleModal } children={ modalContent }>
                 </Modal>

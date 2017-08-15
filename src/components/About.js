@@ -4,6 +4,7 @@
 
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import '../css/About.css';
 
 
 class About extends Component {
@@ -14,10 +15,26 @@ class About extends Component {
 
     render() {
         return (
-            <div>
-                <h1>Welcome to the Session Saver!</h1>
-                <p>Use this app to keep track of your sessions and let your friends know you're okay.</p>
-                <Link className="std-btn" to="/sessions">Get Started</Link>
+            <div className="About">
+                <div className="about-copy">
+                    <h1>Welcome to the Session Saver!</h1>
+                    <p>Create a record with details about your session</p>
+                    <p>Keep your friends in the loop and stay safe</p>
+                    <p>Alert them if you're not back in time</p>
+
+                    <ul>
+                        <li>Surf</li>
+                        <li>Snow</li>
+                        <li>Skate</li>
+                        <li>Run</li>
+                        <li>Ride</li>
+                        <li>Trek</li>
+                    </ul>
+
+                    <p>Don't care about staying safe? Record stats and share pictures from your session instead.</p>
+
+                    <Link className="std-btn" to="/sessions">Get Started</Link>
+                </div>
             </div>
         );
     };
