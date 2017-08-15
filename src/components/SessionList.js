@@ -10,7 +10,6 @@ import base from '../base.js';
 class SessionList extends Component {
     constructor(props) {
         super(props);
-        /*const prevSessions = JSON.parse(localStorage.getItem("sessions"));*/
         this.state = { sessions: [] };
     }
 
@@ -21,7 +20,9 @@ class SessionList extends Component {
     }
 
     componentWillUnmount() {
-        base.removeBinding(this.ref);
+        if(this.props.match.params.user !== undefined) {
+            base.removeBinding(this.ref);
+        }
     }
 
     startSession = (session) => {
