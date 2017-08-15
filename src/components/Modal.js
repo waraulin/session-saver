@@ -21,7 +21,7 @@ class Modal extends React.Component {
                     { this.props.children }
                 </div>
             </div>
-        );
+        )
     }
 }
 
@@ -29,6 +29,6 @@ Modal.propTypes = {
     onClose: PropTypes.func.isRequired,
     show: PropTypes.bool,
     children: PropTypes.node
-};
+}
 
 export default Modal;

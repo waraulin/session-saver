@@ -17,7 +17,7 @@ class SessionComplete extends Component {
         }
         this.currDateTime = date.getMonth() + 1 + '/' + date.getDate() + ' ' + date.getHours() + ':' + currMins;
         this.handleExpansion = this.handleExpansion.bind(this);
-    };
+    }
 
     handleExpansion = () => {
         this.setState({
@@ -45,7 +45,7 @@ class SessionComplete extends Component {
                 <ExpansionToggle expanded={ this.state.expanded } toggle={ this.handleExpansion }/>
             </div>
         )
-    };
-};
+    }
+}
 
 export default SessionComplete;

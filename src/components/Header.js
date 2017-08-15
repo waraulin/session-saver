@@ -3,9 +3,10 @@
  */
 
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Route } from 'react-router-dom';
 import '../css/Header.css';
 import Modal from "./Modal";
+import SessionList from "./SessionList";
 
 class Header extends Component {
     constructor(props) {
@@ -13,8 +14,9 @@ class Header extends Component {
         this.state = {
             loggedIn: null,
             modalOpen: false
-        };
-    };
+        }
+        this.username = "";
+    }
 
     toggleModal = () => {
         this.setState({
@@ -22,21 +24,20 @@ class Header extends Component {
         });
     };
 
-    redirect() {
-        console.log("TODO: use React routing to nav to new page.");
+    redirect = (e) => {
+        this.username = e.target.value;
     };
 
     render () {
         var modalContent = (
             <div className="modal-content">
                 <h2>Login</h2>
-                <h5 className="modal-heading">Email</h5>
-                <input></input>
-                <h5 className="modal-heading">Password</h5>
-                <input></input>
-                <button className="btn" onClick={ this.redirect }>Login</button>
+                <h5 className="modal-heading">Username</h5>
+                <input onBlur={this.redirect}></input>
+                <Link className="btn" to="/dogs">Login</Link>
             </div>
-        );
+        )
+
         return (
             <div className="headerContent">
                 <Link className="btn btn--header" to="/">About</Link>
@@ -46,8 +47,8 @@ class Header extends Component {
                 <Modal show={ this.state.modalOpen } onClose={ this.toggleModal } children={ modalContent }>
                 </Modal>
             </div>
-        );
-    };
-};
+        )
+    }
+}
 
 export default Header;

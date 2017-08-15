@@ -10,9 +10,9 @@ import base from '../base.js';
 class SessionList extends Component {
     constructor(props) {
         super(props);
-        const prevSessions = JSON.parse(localStorage.getItem("sessions"));
-        this.state = { sessions: prevSessions ? prevSessions : [] };
-    };
+        /*const prevSessions = JSON.parse(localStorage.getItem("sessions"));*/
+        this.state = { sessions: [] };
+    }
 
     componentWillMount() {
         if(this.props.match.params.user !== undefined) {
@@ -24,15 +24,10 @@ class SessionList extends Component {
         base.removeBinding(this.ref);
     }
 
-    componentWillUpdate(nextProps, nextState) {
-        if(nextState.sessions !== undefined) {
-            localStorage.setItem("sessions", JSON.stringify(nextState.sessions));
-        }
-    }
-
     startSession = (session) => {
         let newSession = { ...session };
         this.setState({ sessions: [...this.state.sessions, newSession] });
+
     };
 
     deleteSession = (key) => {
@@ -48,7 +43,7 @@ class SessionList extends Component {
         return (
             <div className="SessionList">
                 <SessionStart startSession={ this.startSession } />
-                { this.state.sessions.map((session, i) => (
+                { Object.keys(this.state.sessions).map((session, i) => (
                     session !== undefined ?
                     <SessionComplete key={i} name={i} session={session} deleteSession={this.deleteSession} /> : null
                 ))}
