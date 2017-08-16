@@ -3,10 +3,9 @@
  */
 
 import React, { Component } from 'react';
-import { Link, Route } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import '../css/Header.css';
 import Modal from "./Modal";
-import SessionList from "./SessionList";
 
 class Header extends Component {
     constructor(props) {

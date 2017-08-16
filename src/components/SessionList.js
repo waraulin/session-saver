@@ -10,7 +10,8 @@ import base from '../base.js';
 class SessionList extends Component {
     constructor(props) {
         super(props);
-        this.state = { sessions: [] };
+        this.state = { sessions: {} };
+        console.log("TODO: don't use array for session list use object instead, firebase doesn't like arrays")
     }
 
     componentWillMount() {
@@ -27,16 +28,15 @@ class SessionList extends Component {
 
     startSession = (session) => {
         let newSession = { ...session };
-        this.setState({ sessions: [...this.state.sessions, newSession] });
-
+        let sessions = { ...this.state.sessions };
+        const key = Object.keys(sessions).length;
+        sessions[key] = session;
+        this.setState({ sessions });
     };
 
-    deleteSession = (key) => {
-        let sessions = [...this.state.sessions];
-        sessions[key] = null;
-        sessions = sessions.filter(function(session) {
-           return session !== undefined && session != null;
-        });
+    deleteSession = (sessionKey) => {
+        let sessions = { ...this.state.sessions };
+        sessions[sessionKey] = null;
         this.setState({ sessions });
     };
 
@@ -44,9 +44,8 @@ class SessionList extends Component {
         return (
             <div className="SessionList">
                 <SessionStart startSession={ this.startSession } />
-                { Object.keys(this.state.sessions).map((session, i) => (
-                    session !== undefined ?
-                    <SessionComplete key={i} name={i} session={session} deleteSession={this.deleteSession} /> : null
+                { Object.keys(this.state.sessions).map(i => (
+                    <SessionComplete key={i} name={i} session={this.state.sessions[i]} deleteSession={this.deleteSession} />
                 ))}
             </div>
         )

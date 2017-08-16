@@ -31,7 +31,7 @@ class SessionStart extends Component {
             location: ''
         };
         localStorage.setItem('session', JSON.stringify(this.session));
-    }
+    };
 
     render () {
         return (
