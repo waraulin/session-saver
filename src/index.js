@@ -11,20 +11,15 @@ import Login from './components/Login';
 import { database } from './firebase';
 
 class Root extends Component {
-    constructor() {
-        super();
-        this.state = {uid: null, username: null};
-    }
-
-    componentWillUpdate() {
+    constructor(props) {
+        super(props);
+        this.state = {uid: null, username: null, redirect: false};
     }
 
     updateUser = (uid, username) => {
-        this.setState({uid, username}, () => {
+        this.setState({uid, username, redirect: true}, () => {
             database.ref(`users/${uid}`).set({ username: username });
-            <Redirect to={`/${username}`}/>
         });
-        //window.location = `/${username}`;
     };
 
     render() {
@@ -35,8 +30,9 @@ class Root extends Component {
                     <Switch>
                         <Route exact path="/" component={About}/>
                         <Route exact path="/sessions" component={SessionList}/>
-                        <Route exact path="/login" component={Login} handleAuth={this.updateUser}/>
-                        {this.state.uid ? <Route exact path={`/${this.state.username}`} component={SessionList} uid={this.state.uid} username={this.state.username}/> : null}
+                        <Route exact path="/login" render={(...props) => <Login {...props} handleAuth={this.updateUser} />} />
+                        {this.state.redirect ? <Redirect to={this.state.username}/> : null}
+                        {this.state.uid ? <Route exact path={this.state.username} render={(...props) => <SessionList {...props} uid={this.state.uid} username={this.state.username} />}/> : null}
                         <Route component={NothingFound}/>
                     </Switch>
                 </div>

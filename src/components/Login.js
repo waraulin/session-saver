@@ -6,6 +6,7 @@ class Login extends Component {
     constructor(props) {
         super(props);
     }
+
     componentDidMount() {
         // FirebaseUI config.
         const uiConfig = {
