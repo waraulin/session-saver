@@ -10,7 +10,12 @@ import '../css/About.css';
 class About extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = { username: "" };
+    };
+
+    handleInputChange = (e) => {
+        let username = e.target.value;
+        this.setState({ username });
     };
 
     render() {
@@ -33,7 +38,8 @@ class About extends Component {
 
                     <p>Don't care about staying safe? Record stats and share pictures from your session instead.</p>
 
-                    <Link className="std-btn" to="/sessions">Get Started</Link>
+                    <input type="text" name="username" ref="username" onBlur={ this.handleInputChange } defaultValue={ this.state.username } />
+                    <Link className="std-btn" to={'/'+this.state.username}>Get Started</Link>
                 </div>
             </div>
         );

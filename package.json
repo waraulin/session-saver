@@ -4,6 +4,9 @@
   "private": true,
   "dependencies": {
     "firebase": "^4.2.0",
+    "firebase-functions": "^0.6.2",
+    "firebase-tools": "^3.9.2",
+    "firebaseui": "^2.3.0",
     "prop-types": "^15.5.10",
     "re-base": "^3.0.3",
     "react": "^15.6.1",
