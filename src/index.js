@@ -3,38 +3,32 @@ import ReactDOM from 'react-dom';
 import './css/index.css';
 import registerServiceWorker from './registerServiceWorker';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
-import NothingFound from './components/NothingFound';
+/*import NothingFound from './components/NothingFound';*/
 import Header from './components/Header';
 import SessionList from './components/SessionList';
 import About from './components/About';
 import Login from './components/Login';
-import { database } from './firebase';
+import { auth } from './firebase';
 
 const authentication = {
-    uid: null,
-    username: null,
     authenticated: false,
-    login(uid,username) {
-        this.uid = uid;
-        this.username = username;
+    login() {
         this.authenticated = true;
     },
-    logout(uid) {
+    logout() {
         this.authenticated = false;
-        this.uid = null;
-        this.username = null;
     }
 };
 
+var componentProps = {};
 const PrivateRoute = ({ component: Component, ...rest }) => (
-    console.log("this is happening"),
-    <Route {...rest} exact path="/:username" render={props => (
+    componentProps = {...rest},
+    <Route {...rest} exact path="/:username" render={(props) => (
         authentication.authenticated ? (
-            <Component {...props}/>
+            <Component {...props} componentProps={componentProps} />
         ) : (
             <Redirect to={{
                 pathname: '/login',
-                state: { from: props.location }
             }}/>
         )
     )}/>
@@ -44,35 +38,34 @@ class Root extends Component {
     constructor(props) {
         super(props);
         this.state = {uid: null, username: null, redirect: false};
-        //TODO: figure out why Redirect isn't working
     }
 
     updateUser = (uid, username) => {
-        authentication.login(uid, username);
-        this.setState({uid, username, redirect: true}, () => {
-            database.ref(`users/${uid}`).set({ username: username });
-        });
+        authentication.login(); // this needs to happen before state is updated
+        this.setState({uid, username, redirect: true});
     };
 
-    logout = (uid) => {
-        authentication.logout(uid);
+    logout = () => {
+        console.log("logging out");
+        authentication.logout();
         this.setState({uid: null, username: null, redirect: false}, () => {
-            /*database.removeBinding(`users/${uid}`);*/
+            auth.signOut().then(() => {
+                console.log("success");
+            }).catch(error => {
+                console.log(error);
+            });
         });
     };
 
-    /*{this.state.redirect ? <Redirect to={this.state.username}/> : null}*/
-    /*{this.state.uid ? <Route exact path={this.state.username} render={(...props) => <SessionList {...props} uid={this.state.uid} username={this.state.username} />}/> : null}*/
-    /*<Route component={NothingFound}/>*/
     render() {
         return (
             <BrowserRouter>
                 <div>
-                    <Header />
+                    <Header authenticated={authentication.authenticated} logout={this.logout} />
                     <Route exact path="/" component={About}/>
-                    <Route exact path="/login" render={(...props) => <Login {...props} handleAuth={this.updateUser} username={this.state.username} />} />
+                    <Route exact path="/login" render={(...props) => <Login {...props} handleAuth={this.updateUser} username={this.state.username} logout={this.logout} />} />
                     <Route exact path="/sessions" component={SessionList}/>
-                    <PrivateRoute path={this.state.username} component={SessionList} username={authentication.username} uid={authentication.uid} logout={authentication.logout} redirect={authentication.authenticated} />
+                    <PrivateRoute path={this.state.username} component={SessionList} username={this.state.username} uid={this.state.uid} logout={this.logout} redirect={this.state.redirect} />
                 </div>
             </BrowserRouter>
         )

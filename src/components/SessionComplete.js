@@ -30,7 +30,7 @@ class SessionComplete extends Component {
             <div className="SessionContent">
                 <h5>{ this.currDateTime }</h5>
                 {! this.state.expanded ? (
-                    <h5 className="activity-head">{ this.props.session.activity }</h5>
+                    <h5 className="activity-head">{ this.props.session ? this.props.session.activity : null }</h5>
                 ) : (
                     <div className="expanded-content">
                         <h5>Activity</h5>

@@ -1,38 +1,46 @@
 import React, { Component } from 'react';
-import firebase from '../firebase.js';
-import firebaseui from 'firebaseui';
+import { auth } from '../firebase.js';
 import { Redirect } from 'react-router-dom';
+import '../css/Login.css';
 
 class Login extends Component {
     constructor(props) {
         super(props);
+        this.user = {email: null, password: null};
     }
 
     componentDidMount() {
-        // FirebaseUI config.
-        const uiConfig = {
-            callbacks: {
-                signInSuccess: function(currentUser, credential){
-                    const username = currentUser.email.split('@')[0];
-                    this.props.handleAuth(currentUser.uid, username);
-                }.bind(this)
-            },
-            signInOptions: [
-                // Leave the lines as is for the providers you want to offer your users.
-                firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-                firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-                firebase.auth.GithubAuthProvider.PROVIDER_ID,
-                firebase.auth.EmailAuthProvider.PROVIDER_ID,
-                firebase.auth.PhoneAuthProvider.PROVIDER_ID
-            ],
-        };
-        const ui = new firebaseui.auth.AuthUI(firebase.auth());
-        ui.start('#firebaseui-auth-container', uiConfig);
+        auth.onAuthStateChanged((user) => {
+           if (user) {
+               const username = user.email.split('@')[0];
+               this.props.handleAuth(user.uid, username);
+           } else {
+               this.props.logout();
+           }
+        });
+
     }
+
+    signup = (e) => {
+        e.preventDefault();
+        const newEmail = this.refs.newEmail.value;
+        const newPassword = this.refs.newPassword.value;
+        auth.createUserWithEmailAndPassword(newEmail, newPassword).catch(error => {
+            console.log(error);
+        });
+    };
+
+    signin = (e) => {
+        e.preventDefault();
+        const email = this.refs.email.value;
+        const password = this.refs.password.value;
+        auth.signInWithEmailAndPassword(email, password).catch(error => {
+            console.log(error);
+        });
+    };
 
     render() {
         if(this.props.username) {
-            console.log("redirecting")
             return (
                 <Redirect to={this.props.username} />
             )
@@ -40,7 +48,18 @@ class Login extends Component {
 
         return (
             <div className="Login">
-                <div id="firebaseui-auth-container" />
+                <form onSubmit={this.signup}>
+                    <p>Sign Up</p>
+                    <input type="email" name="email" ref="newEmail" defaultValue="example@sessionsaver.co" />
+                    <input type="password" name="password" ref="newPassword" defaultValue="abcdef" />
+                    <input type="submit" value="Submit" />
+                </form>
+                <form onSubmit={this.signin}>
+                    <p>Sign In</p>
+                    <input type="email" name="email" ref="email" defaultValue="example@sessionsaver.co" />
+                    <input type="password" name="password" ref="password" defaultValue="abcdef" />
+                    <input type="submit" value="Submit" />
+                </form>
             </div>
         )
     }

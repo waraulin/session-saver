@@ -11,25 +11,21 @@ import { database } from '../firebase.js';
 class SessionList extends Component {
     constructor(props) {
         super(props);
-        this.state = { uid: this.props.uid,sessions: this.props.uid ? database.ref(`users/${this.props.uid}.sessions`).once('value').then((snapshot) => {
-            snapshot.val().sessions;
-        }) : {} };
-        console.log(this.state);
-    }
+        this.authProps = this.props.componentProps ? this.props.componentProps : {uid: null, username: null};
+        this.state = { uid: this.authProps.uid, sessions: {}, username: this.authProps.username};
+        this.userRef = null;
 
-    componentWillMount() {
-        /*if(this.props.match.params.user !== undefined) {
-            this.ref = base.syncState(`${this.props.match.params.user}/sessions`, {context: this, state: {'sessions', 'username', 'uid'}});
-        }*/
+        //TODO: check `firebase:` local storage data to set initial state.
     }
 
     componentDidMount() {
-    }
+        this.userRef = database.ref(`users/${this.state.uid}`);
+        this.userSessionsRef = this.userRef.child('sessions');
+        this.userSessionsRef.on('value', function(snapshot) {
+            const sessions = snapshot.val() ? snapshot.val().reduce((obj, item, index) => (obj[index] = item, obj) ,{}) : {};
+            this.setState({ sessions });
+        }.bind(this));
 
-    componentWillUnmount() {
-        /*if(this.props.match.params.user !== undefined) {
-            base.removeBinding(this.ref);
-        }*/
     }
 
     startSession = (session) => {
@@ -37,19 +33,18 @@ class SessionList extends Component {
         let sessions = { ...this.state.sessions };
         const key = Object.keys(sessions).length;
         sessions[key] = newSession;
-        database.ref(`users/${this.state.uid}`).set({
-            sessions: sessions
+
+        this.setState({ sessions }, () => {
+            return this.userSessionsRef.update(this.state.sessions);
         });
-        this.setState({ sessions });
     };
 
     deleteSession = (sessionKey) => {
         let sessions = { ...this.state.sessions };
         sessions[sessionKey] = null;
-        database.ref(`users/${this.state.uid}`).set({
-            sessions: sessions
+        this.setState({ sessions }, () => {
+            return this.userSessionsRef.update(this.state.sessions);
         });
-        this.setState({ sessions });
     };
 
     logout = () => {
@@ -64,7 +59,6 @@ class SessionList extends Component {
                     <SessionComplete key={i} name={i} session={this.state.sessions[i]}
                                      deleteSession={this.deleteSession}/>
                 ))}
-                <button onClick={this.logout}>Log out</button>
             </div>
         )
     }
