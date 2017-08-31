@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import firebase from '../firebase.js';
 import firebaseui from 'firebaseui';
+import { Redirect } from 'react-router-dom';
 
 class Login extends Component {
     constructor(props) {
@@ -11,8 +12,7 @@ class Login extends Component {
         // FirebaseUI config.
         const uiConfig = {
             callbacks: {
-                signInSuccess: function(currentUser, credential, redirectUrl){
-                    console.log(currentUser, credential, redirectUrl);
+                signInSuccess: function(currentUser, credential){
                     const username = currentUser.email.split('@')[0];
                     this.props.handleAuth(currentUser.uid, username);
                 }.bind(this)
@@ -31,6 +31,13 @@ class Login extends Component {
     }
 
     render() {
+        if(this.props.username) {
+            console.log("redirecting")
+            return (
+                <Redirect to={this.props.username} />
+            )
+        }
+
         return (
             <div className="Login">
                 <div id="firebaseui-auth-container" />

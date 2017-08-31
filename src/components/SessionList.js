@@ -11,10 +11,10 @@ import { database } from '../firebase.js';
 class SessionList extends Component {
     constructor(props) {
         super(props);
-        this.state = { sessions: this.props.uid ? database.ref(`users/${this.props.uid}.sessions`).once('value').then((snapshot) => {
+        this.state = { uid: this.props.uid,sessions: this.props.uid ? database.ref(`users/${this.props.uid}.sessions`).once('value').then((snapshot) => {
             snapshot.val().sessions;
         }) : {} };
-        //TODO: figure out how to import firebase auth
+        console.log(this.state);
     }
 
     componentWillMount() {
@@ -24,7 +24,6 @@ class SessionList extends Component {
     }
 
     componentDidMount() {
-
     }
 
     componentWillUnmount() {
@@ -53,6 +52,10 @@ class SessionList extends Component {
         this.setState({ sessions });
     };
 
+    logout = () => {
+        this.props.logout(this.props.uid);
+    };
+
     render() {
         return (
             <div className="SessionList">
@@ -61,6 +64,7 @@ class SessionList extends Component {
                     <SessionComplete key={i} name={i} session={this.state.sessions[i]}
                                      deleteSession={this.deleteSession}/>
                 ))}
+                <button onClick={this.logout}>Log out</button>
             </div>
         )
     }
