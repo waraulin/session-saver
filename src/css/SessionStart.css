@@ -12,3 +12,8 @@ h5 {
 .btn {
     background-color: #42A5FC;
 }
+
+#map {
+    height: 336px;
+    margin: 24px 0;
+}

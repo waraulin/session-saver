@@ -15,6 +15,44 @@ class SessionStart extends Component {
         };
     }
 
+    componentDidMount() {
+        const office = {lat: 37.856, lng: -122.267};
+        this.map = new window.google.maps.Map(document.getElementById('map'), {
+            center: office,
+            zoom: 8
+        });
+        this.marker = new window.google.maps.Marker({
+           position: office,
+           map: this.map
+        });
+        this.infoWindow = new window.google.maps.InfoWindow;
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var pos = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+
+                this.marker.setPosition(pos);
+                this.map.setCenter(pos);
+            }, function() {
+                this.handleLocationError(true, this.infoWindow, this.map.getCenter());
+            }.bind(this));
+        } else {
+            // Browser doesn't support Geolocation
+            this.handleLocationError(false, this.infoWindow, this.map.getCenter());
+        }
+    }
+
+    handleLocationError = (browserHasGeolocation, infoWindow, pos) => {
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(browserHasGeolocation ?
+            'Error: The Geolocation service failed.' :
+            'Error: Your browser doesn\'t support geolocation.');
+        infoWindow.open(this.map);
+    };
+
     handleInputChange = (e) => {
         this.session[e.target.name] = e.target.value;
         localStorage.setItem('session', JSON.stringify(this.session));
@@ -43,6 +81,7 @@ class SessionStart extends Component {
                 <input type="text" name="description" ref="description" onBlur={ this.handleInputChange } defaultValue={ this.session.description } />
                 <h5>Location</h5>
                 <input type="text" name="location" ref="location" onBlur={ this.handleInputChange } defaultValue={ this.session.location } />
+                <div id="map"></div>
                 <button className="btn" onClick={ this.handleButtonClick }>Start session!</button>
             </div>
         )
