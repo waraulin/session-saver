@@ -63,7 +63,7 @@ class SessionStart extends Component {
                 this.updateLocation(pos);
                 this.infoWindow.setPosition(pos);
                 this.infoWindow.setContent('Zoom in and move the pin for more accurate location.');
-                this.infowWindow.open(this.map);
+                this.infoWindow.open(this.map);
             }.bind(this), function(PositionError) {
                 console.log(PositionError);
                 this.handleLocationError(true, this.infoWindow, this.map.getCenter());
@@ -107,7 +107,15 @@ class SessionStart extends Component {
             <div className="SessionContent">
                 <h2>New Session</h2>
                 <h5>Activity</h5>
-                <input type="text" name="activity" ref="activity" onBlur={ this.handleInputChange } defaultValue={ this.state.activity } />
+                <select name="activity" ref="activity" onBlur={ this.handleInputChange } defaultValue={ this.state.activity }>
+                    <option value="surf">Surf</option>
+                    <option value="swim">Swim</option>
+                    <option value="hike">Hike</option>
+                    <option value="run">Run</option>
+                    <option value="walk">Walk</option>
+                    <option value="snow">Snow</option>
+                    <option value="fly">Fly</option>
+                </select>
                 <h5>Description</h5>
                 <textarea type="text" name="description" ref="description" onBlur={ this.handleInputChange } defaultValue={ this.state.description } />
                 <h5>Location</h5>

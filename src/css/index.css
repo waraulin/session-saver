@@ -34,7 +34,7 @@ body {
   text-decoration: none;
 }
 
-input, textarea {
+input, textarea, select, option {
   width: 100%;
   padding: 4px 8px;
   font-size: 14px;
