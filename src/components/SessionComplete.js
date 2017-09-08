@@ -25,6 +25,11 @@ class SessionComplete extends Component {
         });
     };
 
+    renderStaticMap = (pos) => {
+        const position = JSON.parse(pos);
+        return `https://maps.googleapis.com/maps/api/staticmap?center=${position.lat},${position.lng}&markers=color:red%7Clabel:C%7C${position.lat},${position.lng}&zoom=12&size=336x336&key=AIzaSyB4ATcabX0qhwWkrKhlh5Fs01j-B_87H0U`
+    };
+
     render () {
         return (
             <div className="SessionContent">
@@ -38,7 +43,7 @@ class SessionComplete extends Component {
                         <h5>Description</h5>
                         <p>{this.props.session.description}</p>
                         <h5>Location</h5>
-                        <p>{this.props.session.location}</p>
+                        <img src={this.renderStaticMap(this.props.session.location)} />
                     </div>
                 )}
                 <button className="expansion-btn" onClick={ () => this.props.deleteSession(this.props.name) }>X Delete</button>

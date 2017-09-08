@@ -8,7 +8,7 @@ import './SessionComplete';
 class SessionStart extends Component {
     constructor(props) {
         super(props);
-        this.session = JSON.parse(localStorage.getItem('session')) || {
+        this.state = {
             activity: '',
             description: '',
             location: ''
@@ -16,11 +16,39 @@ class SessionStart extends Component {
     }
 
     componentDidMount() {
-        const office = {lat: 37.856, lng: -122.267};
+        this.renderMap();
+    }
+
+    renderMap = () => {
+        const initialLocation = {lat: 37.759, lng: -122.511}; //Ocean Beach, SF
         this.map = new window.google.maps.Map(document.getElementById('map'), {
-            center: office,
-            zoom: 8
+            center: initialLocation,
+            zoom: 12 //1: World, 5: Landmass/continent, 10: City, 15: Streets, 20: Buildings
         });
+        this.marker = new window.google.maps.Marker({
+            position: this.map.center,
+            animation: window.google.maps.Animation.DROP,
+            draggable:true
+        });
+
+        var update_timeout = null; // This is a hacky thing to make the map register both click and dblclick events, otherwise only single clicks are registered
+
+        this.map.addListener('click', function(e) {
+            update_timeout = setTimeout(function () {
+                const lat = e.latLng.lat();
+                const lng = e.latLng.lng();
+                const pos = {lat, lng}
+                this.marker.setPosition(pos);
+                this.updateLocation(pos);
+                this.marker.setMap(this.map);
+                this.infoWindow.close();
+            }.bind(this), 200);
+        }.bind(this));
+
+        this.map.addListener('dblclick', function(e) {
+            clearTimeout(update_timeout);
+            this.map.setZoom(this.map.zoom++);
+        }.bind(this));
 
         this.infoWindow = new window.google.maps.InfoWindow;
 
@@ -30,46 +58,48 @@ class SessionStart extends Component {
                     lat: position.coords.latitude,
                     lng: position.coords.longitude
                 };
-                this.marker = new window.google.maps.Marker({
-                    position: pos,
-                    map: this.map
-                });
-                this.infoWindow.setPosition(pos);
-                this.infoWindow.setContent('Is this your location?');
+                this.marker.setPosition(pos);
                 this.map.setCenter(pos);
-            }.bind(this), function() {
+                this.updateLocation(pos);
+                this.infoWindow.setPosition(pos);
+                this.infoWindow.setContent('Zoom in and move the pin for more accurate location.');
+                this.infowWindow.open(this.map);
+            }.bind(this), function(PositionError) {
+                console.log(PositionError);
                 this.handleLocationError(true, this.infoWindow, this.map.getCenter());
             }.bind(this));
         } else {
             // Browser doesn't support Geolocation
             this.handleLocationError(false, this.infoWindow, this.map.getCenter());
         }
-    }
+    };
 
     handleLocationError = (browserHasGeolocation, infoWindow, pos) => {
+        const infoCopy = "Navigate to your location and click to drop a pin."
         infoWindow.setPosition(pos);
         infoWindow.setContent(browserHasGeolocation ?
-            'Error: The Geolocation service failed.' :
-            'Error: Your browser doesn\'t support geolocation.');
+            'Error: The Geolocation service failed.' + ' ' + infoCopy :
+            'Error: Your browser doesn\'t support geolocation.' + ' ' + infoCopy);
         infoWindow.open(this.map);
     };
 
+    updateLocation = (pos) => {
+        this.setState({ location: JSON.stringify(pos) });
+    };
+
     handleInputChange = (e) => {
-        this.session[e.target.name] = e.target.value;
-        localStorage.setItem('session', JSON.stringify(this.session));
+        this.setState({ [e.target.name]: e.target.value });
     };
 
     handleButtonClick = (e) => {
-        this.props.startSession(this.session);
+        this.props.startSession(this.state);
         this.refs.activity.value = "";
         this.refs.description.value = "";
-        this.refs.location.value = "";
-        this.session = {
+        this.setState({
             activity: '',
             description: '',
             location: ''
-        };
-        localStorage.setItem('session', JSON.stringify(this.session));
+        });
     };
 
     render () {
@@ -77,11 +107,10 @@ class SessionStart extends Component {
             <div className="SessionContent">
                 <h2>New Session</h2>
                 <h5>Activity</h5>
-                <input type="text" name="activity" ref="activity" onBlur={ this.handleInputChange } defaultValue={ this.session.activity } />
+                <input type="text" name="activity" ref="activity" onBlur={ this.handleInputChange } defaultValue={ this.state.activity } />
                 <h5>Description</h5>
-                <input type="text" name="description" ref="description" onBlur={ this.handleInputChange } defaultValue={ this.session.description } />
+                <textarea type="text" name="description" ref="description" onBlur={ this.handleInputChange } defaultValue={ this.state.description } />
                 <h5>Location</h5>
-                <input type="text" name="location" ref="location" onBlur={ this.handleInputChange } defaultValue={ this.session.location } />
                 <div id="map"></div>
                 <button className="btn" onClick={ this.handleButtonClick }>Start session!</button>
             </div>
