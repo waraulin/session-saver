@@ -21,10 +21,7 @@ class SessionStart extends Component {
             center: office,
             zoom: 8
         });
-        this.marker = new window.google.maps.Marker({
-           position: office,
-           map: this.map
-        });
+
         this.infoWindow = new window.google.maps.InfoWindow;
 
         if (navigator.geolocation) {
@@ -33,10 +30,14 @@ class SessionStart extends Component {
                     lat: position.coords.latitude,
                     lng: position.coords.longitude
                 };
-
-                this.marker.setPosition(pos);
+                this.marker = new window.google.maps.Marker({
+                    position: pos,
+                    map: this.map
+                });
+                this.infoWindow.setPosition(pos);
+                this.infoWindow.setContent('Is this your location?');
                 this.map.setCenter(pos);
-            }, function() {
+            }.bind(this), function() {
                 this.handleLocationError(true, this.infoWindow, this.map.getCenter());
             }.bind(this));
         } else {
