@@ -56,6 +56,8 @@ exports.sendByeEmail = functions.auth.user().onDelete(event => {
 });
 // [END sendByeEmail]
 
+exports.sendSessionEmail = functions.database.ref
+
 // Sends a welcome email to the given user.
 function sendWelcomeEmail(email, displayName) {
     const mailOptions = {
@@ -84,4 +86,19 @@ function sendGoodbyEmail(email, displayName) {
     return mailTransport.sendMail(mailOptions).then(() => {
         console.log('Account deletion confirmation email sent to:', email);
     });
+}
+
+//Send email to contact
+function sendSessionEmail(email, message) {
+    const mailOptions = {
+        from: `${APP_NAME} <noreply@firebase.com>`,
+        to: email
+    };
+
+    // The user unsubscribed to the newsletter.
+    mailOptions.subject = `Bye!`;
+    mailOptions.text = `Hey ${displayName || ''}!, We confirm that we have deleted your ${APP_NAME} account.`;
+    return mailTransport.sendMail(mailOptions).then(() => {
+        console.log("Session email sent");
+    })
 }

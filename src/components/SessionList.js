@@ -47,6 +47,11 @@ class SessionList extends Component {
         });
     };
 
+    sendEmail = (newEmail) => {
+        this.emailRef = this.userRef.child('emails');
+        return this.emailRef.update(newEmail);
+    };
+
     logout = () => {
         this.props.logout(this.props.uid);
     };
@@ -54,7 +59,7 @@ class SessionList extends Component {
     render() {
         return (
             <div className="SessionList">
-                <SessionStart startSession={this.startSession}/>
+                <SessionStart startSession={this.startSession} sendEmail={this.sendEmail} />
                 {Object.keys(this.state.sessions).map(i => (
                     <SessionComplete key={i} name={i} session={this.state.sessions[i]}
                                      deleteSession={this.deleteSession}/>

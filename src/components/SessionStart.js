@@ -59,6 +59,7 @@ class SessionStart extends Component {
                     lng: position.coords.longitude
                 };
                 this.marker.setPosition(pos);
+                this.marker.setMap(this.map);
                 this.map.setCenter(pos);
                 this.updateLocation(pos);
                 this.infoWindow.setPosition(pos);
@@ -102,6 +103,29 @@ class SessionStart extends Component {
         });
     };
 
+    endSession = () => {
+        this.props.startSession(this.state);
+        this.refs.activity.value = "";
+        this.refs.description.value = "";
+        this.setState({
+            activity: '',
+            description: '',
+            location: ''
+        });
+    };
+
+    startSession = () => {
+        //start timer
+        //set pending state
+        //timer expires => send email
+        this.sendEmail();
+    };
+
+    sendEmail = () => {
+        const email = {recipient: "waraulin@gmail.com", activity: this.state.activity, description: this.state.description, location: this.state.location};
+        this.props.sendEmail(email);
+    };
+
     render () {
         return (
             <div className="SessionContent">
@@ -120,7 +144,8 @@ class SessionStart extends Component {
                 <textarea type="text" name="description" ref="description" onBlur={ this.handleInputChange } defaultValue={ this.state.description } />
                 <h5>Location</h5>
                 <div id="map"></div>
-                <button className="btn" onClick={ this.handleButtonClick }>Start session!</button>
+                <button className="btn" onClick={ this.startSessionk }>Start session</button>
+                <button className="btn" onClick={ this.endSession }>End session!</button>
             </div>
         )
     }
